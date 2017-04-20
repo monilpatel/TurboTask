@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1092093010576",
+    "firebase_url": "https://turbotask-70d61.firebaseio.com",
+    "project_id": "turbotask-70d61",
+    "storage_bucket": "turbotask-70d61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092093010576:android:335f76acc8db5baa",
+        "android_client_info": {
+          "package_name": "com.example.monil.turbotask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092093010576-qb6pi1vtjtluiv5k6bo44pb2n377f3vj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.monil.turbotask",
+            "certificate_hash": "2777343b2cde708e00de1e771a778dae8c7dd30c"
+          }
+        },
+        {
+          "client_id": "1092093010576-33p7qrt0u11v7798fm8c9v8o0ko9n2f4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOe2vubozRustiw_b74bZlv5NmpvO4F14"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092093010576-33p7qrt0u11v7798fm8c9v8o0ko9n2f4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
