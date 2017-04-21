@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/list"
+        android:title="My Tasks"
+        android:icon="@drawable/ic_list_black_24dp"
+        />
+    <item
+        android:id="@+id/calendar"
+        android:title="Calendar"
+        android:icon="@drawable/ic_event_black_24dp"
+        />
+
+    <item
+        android:id="@+id/add"
+        android:title="Add Task"
+        android:icon="@drawable/ic_add_black_24dp" />
+    <item
+        android:id="@+id/classes"
+        android:title="Classes"
+        android:icon="@drawable/ic_class_black_24dp"
+        />
+</menu>
