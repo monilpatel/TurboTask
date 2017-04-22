@@ -82,6 +82,8 @@ public class SignInActivity extends AppCompatActivity {
                                     Toast.makeText(SignInActivity.this,"ERRRORRRRRR", Toast.LENGTH_LONG).show();
                                 } else {
                                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                     finish();
                                 }
