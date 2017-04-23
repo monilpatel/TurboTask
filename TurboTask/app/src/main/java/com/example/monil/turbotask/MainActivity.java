@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -19,11 +21,18 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FragmentManager fragmentManager;
+    private Fragment listFragment, taskFragment, calendarFragment, classesFragment, addTaskFragment ;
+
+
+    private String currentFragment;
+    private Fragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fragmentManager = getSupportFragmentManager();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -43,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
-        //TODO: Retain previous fragments
-        //right now every time the bottom navigation button is clicked it creates a new instance
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener
@@ -55,32 +61,67 @@ public class MainActivity extends AppCompatActivity {
                         Fragment selectedFragment = null;
                         switch (item.getItemId()) {
                             case R.id.list:
-                                selectedFragment = ListFragment.newInstance();
+                                changeFragment(TaskListFragment.TAG_TASK_LIST);
                                 break;
                             case R.id.calendar:
-                                selectedFragment = CalendarFragment.newInstance();
+                                changeFragment(CalendarFragment.TAG_CALENDAR);
                                 break;
                             case R.id.add:
-                                selectedFragment = AddTaskFragment.newInstance();
+                                changeFragment(AddTaskFragment.TAG_ADD_TASK);
                                 break;
                             case R.id.classes:
-                                selectedFragment = ClassesFragment.newInstance();
+                                changeFragment(ClassesFragment.TAG_CLASSES);
                                 break;
 
                         }
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_layout, selectedFragment);
-                        transaction.commit();
+//                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                        transaction.replace(R.id.frame_layout, selectedFragment);
+//                        transaction.commit();
                         return true;
                     }
                 });
 
         //TODO: it also defaults to the list view, thats why if you rotate it the screen goes blank
-        //because it is displaying the list view (which is empty)
-        //Manually displaying the first fragment - one time only
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, ListFragment.newInstance());
-        transaction.commit();
+
+
+
+        taskFragment = (TaskFragment) fragmentManager.findFragmentByTag(TaskFragment.TAG_TASK_FRAGMENT);
+        if(taskFragment == null){
+            taskFragment = new TaskFragment();
+            fragmentManager.beginTransaction().add(taskFragment, TaskFragment.TAG_TASK_FRAGMENT).commit();
+        }
+
+        if(savedInstanceState == null){
+            Log.d("retain", "list view was created ");
+            listFragment = new TaskListFragment();
+            ((TaskFragment)taskFragment).setActiveTag(TaskListFragment.TAG_TASK_LIST);
+            fragmentManager.beginTransaction().add(listFragment, TaskListFragment.TAG_TASK_LIST).commit();
+            Log.d("retain", "taskFragment new tag: " +  ((TaskFragment)taskFragment).getActiveTag());
+
+        }
+        else{
+
+            Log.d("retain", "savedInstance was not null");
+            String currentTag = ((TaskFragment)taskFragment).getActiveTag();
+
+            if(currentTag.equals(TaskListFragment.TAG_TASK_LIST)){
+                Log.d("retain", "list view was retained" );
+                listFragment = fragmentManager.findFragmentByTag(currentTag);
+            }
+            else if(currentTag.equals(AddTaskFragment.TAG_ADD_TASK)){
+                Log.d("retain", "add task was retained" );
+                addTaskFragment = fragmentManager.findFragmentByTag(currentTag);
+            }
+            else if(currentTag.equals(CalendarFragment.TAG_CALENDAR)){
+                Log.d("retain", "calendar was retained" );
+                calendarFragment = fragmentManager.findFragmentByTag(currentTag);
+            }
+            else if(currentTag.equals(ClassesFragment.TAG_CLASSES)){
+                Log.d("retain", "classes was retained" );
+                classesFragment = fragmentManager.findFragmentByTag(currentTag);
+            }
+        }
+
     }
 
     @Override
@@ -116,5 +157,50 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    public void changeFragment(String fragment_name){
+        Fragment fragment;
+        Class fragmentClass = null;
+        if(fragment_name.equals(AddTaskFragment.TAG_ADD_TASK)){
+            fragmentClass = AddTaskFragment.class;
+            Log.d("retain", "add tasks fragment selected");
+        }
+        else if(fragment_name.equals(CalendarFragment.TAG_CALENDAR)){
+            fragmentClass = CalendarFragment.class;
+            Log.d("retain", "calendar fragment selected");
+        }
+        else if(fragment_name.equals(ClassesFragment.TAG_CLASSES)){
+            fragmentClass = ClassesFragment.class;
+            Log.d("retain", "classes fragment selected");
+        }
+        else if(fragment_name.equals(TaskListFragment.TAG_TASK_LIST)){
+            fragmentClass = TaskListFragment.class;
+            Log.d("retain", "task list fragment selected");
+        }
+
+        try{
+            if(fragmentClass != null){
+                currentFragment = fragment_name;
+                fragment = (Fragment) fragmentClass.newInstance();
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+                ft.replace(R.id.frame_layout, fragment, currentFragment);
+                ft.addToBackStack(null);
+                ((TaskFragment)taskFragment).setActiveTag(fragment_name);
+                ft.commit();
+
+            }
+
+        }catch (Exception e){
+            Log.d("fragment", "no fragment chosen");
+            e.printStackTrace();
+
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

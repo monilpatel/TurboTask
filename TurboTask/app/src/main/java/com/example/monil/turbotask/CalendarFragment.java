@@ -11,6 +11,8 @@ import android.view.ViewGroup;
  */
 
 public class CalendarFragment extends Fragment {
+    public static final String TAG_CALENDAR = "calendar_fragment";
+
     public static CalendarFragment newInstance() {
         CalendarFragment fragment = new CalendarFragment();
         return fragment;
@@ -19,11 +21,14 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.calendar_fragment, container, false);
+        View v = inflater.inflate(R.layout.calendar_fragment, container, false);
+        return v;
     }
 }

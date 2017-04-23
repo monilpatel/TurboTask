@@ -11,6 +11,8 @@ import android.view.ViewGroup;
  */
 
 public class ClassesFragment extends Fragment {
+    public static final String TAG_CLASSES = "classes_fragment";
+
     public static ClassesFragment newInstance() {
         ClassesFragment fragment = new ClassesFragment();
         return fragment;
@@ -19,11 +21,14 @@ public class ClassesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.classes_fragment, container, false);
+        View v = inflater.inflate(R.layout.classes_fragment, container, false);
+        return v;
     }
 }

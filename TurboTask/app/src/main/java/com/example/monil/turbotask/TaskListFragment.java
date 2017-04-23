@@ -10,10 +10,11 @@ import android.view.ViewGroup;
  * Created by monil on 4/19/2017.
  */
 
-public class ListFragment extends Fragment {
+public class TaskListFragment extends Fragment {
+    public static final String TAG_TASK_LIST = "task_list_fragment";
 
-    public static ListFragment newInstance() {
-        ListFragment fragment = new ListFragment();
+    public static TaskListFragment newInstance() {
+        TaskListFragment fragment = new TaskListFragment();
         return fragment;
 
     }
@@ -21,12 +22,13 @@ public class ListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.list_fragment, container, false);
+        View v = inflater.inflate(R.layout.list_fragment, container, false);
+        return v;
     }
 }
