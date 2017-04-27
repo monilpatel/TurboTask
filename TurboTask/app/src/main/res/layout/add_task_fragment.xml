@@ -21,16 +21,44 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <!-- Header -->
 
             <include
                 android:id="@+id/container_header_lyt"
-                android:layout_height="176dp"
+                layout="@layout/add_task_header"
                 android:layout_width="fill_parent"
-                layout="@layout/add_task_header" />
+                android:layout_height="wrap_content"
+                android:layout_weight="3.51" />
 
+            <EditText
+                android:id="@+id/dueDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/darkBlue"
+                android:ems="10"
+                android:hint="Due Date"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textColorHint="@color/gray"
+                android:textSize="13sp"
+                android:focusable="false"/>
+
+            <Spinner
+                android:id="@+id/classTag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.51"
+                style="@android:style/Widget.Spinner"/>
+
+            <Spinner
+                android:id="@+id/priority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.51"
+                style="@android:style/Widget.Spinner"/>
         </LinearLayout>
     </ScrollView>
 
@@ -41,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:text="Button"
+        android:text="Discard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -52,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
-        android:text="Save Task"
+        android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>

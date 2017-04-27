@@ -4,4 +4,15 @@
     <string name="password">Password</string>
     <string name="login">LOGIN</string>
     <string name="register">Don\'t have an account? Signup!</string>
+    <string-array name="class_array">
+        <item>Math</item>
+        <item>Science</item>
+        <item>History</item>
+    </string-array>
+    <string-array name="priority_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
 </resources>
