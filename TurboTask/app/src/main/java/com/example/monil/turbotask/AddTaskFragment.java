@@ -11,8 +11,11 @@ import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
 
     private FirebaseUser user;
     private DatabaseReference dbRef;
+//    private DatabaseReference userTasksRef;
 
     public static AddTaskFragment newInstance() {
         AddTaskFragment fragment = new AddTaskFragment();
@@ -43,6 +47,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
         Log.d("buttons", "add task fragment on create");
         dbRef = FirebaseDatabase.getInstance().getReference("data");
         user = FirebaseAuth.getInstance().getCurrentUser();
+//        userTasksRef = FirebaseDatabase.getInstance().getReference("data").child("user-tasks").child(user.getUid());
 
     }
 
@@ -66,6 +71,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
             Log.d("buttons", "task saved!" );
             createNewTask(user.getUid(), inputTask.getText().toString(), "", "", 0);
             //TODO: send back to task list
+//            postTask();
 
         }
     }
@@ -80,6 +86,27 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
 
         dbRef.updateChildren(childUpdates);
 
+    }
+
+    private void postTask(){
+        final String uid = user.getUid();
+        FirebaseDatabase.getInstance().getReference().child("user-task").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String nameText = inputTask.getText().toString();
+                        Task task = new Task(uid, nameText, "", "", 0);
+
+                        // Push the comment, it will appear in the list
+//                        userTasksRef.push().setValue(task);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+
+                });
     }
 
 }

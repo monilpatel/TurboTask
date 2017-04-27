@@ -93,10 +93,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState == null){
             Log.d("retain", "list view was created ");
-            listFragment = new TaskListFragment();
-            ((TaskFragment)taskFragment).setActiveTag(TaskListFragment.TAG_TASK_LIST);
-            fragmentManager.beginTransaction().add(listFragment, TaskListFragment.TAG_TASK_LIST).commit();
-            Log.d("retain", "taskFragment new tag: " +  ((TaskFragment)taskFragment).getActiveTag());
+//            listFragment = new TaskListFragment();
+//            ((TaskFragment)taskFragment).setActiveTag(TaskListFragment.TAG_TASK_LIST);
+//            fragmentManager.beginTransaction().add(listFragment, TaskListFragment.TAG_TASK_LIST).commit();
+//            Log.d("retain", "taskFragment new tag: " +  ((TaskFragment)taskFragment).getActiveTag());
+            changeFragment(TaskListFragment.TAG_TASK_LIST);
 
         }
         else{
