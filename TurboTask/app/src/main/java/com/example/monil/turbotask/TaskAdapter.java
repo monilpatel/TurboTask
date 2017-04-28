@@ -100,6 +100,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>{
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         Task task = mTasks.get(position);
         holder.name.setText(task.getName());
+        holder.className.setText(task.getClassName());
+        holder.date.setText(task.getDate());
     }
 
     @Override

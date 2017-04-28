@@ -32,6 +32,7 @@
         android:background="@color/darkBlue"
         android:padding="10dp"
         android:textColorHint="@color/gray"
+        android:textColor="@color/white"
         android:hint="Name of Task"
         android:textSize="13sp"
         app:layout_constraintLeft_toLeftOf="parent"

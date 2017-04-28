@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class TaskListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_fragment, container, false);
         mRecycler = (RecyclerView) v.findViewById(R.id.recycler_tasks);
+        v.setOnClickListener(new TaskListListener());
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
         if(mTasksReference != null){
@@ -54,5 +56,14 @@ public class TaskListFragment extends Fragment {
         }
 
         return v;
+    }
+
+
+    public class TaskListListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            int itemPosition = mRecycler.indexOfChild(v);
+            Log.d("recycler", "Clicked and Position is : " + String.valueOf(itemPosition));
+        }
     }
 }

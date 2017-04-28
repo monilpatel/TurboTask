@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,17 +66,16 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
         dueDateTxt.setOnClickListener(this);
 
         priority = (Spinner) v.findViewById(R.id.priority);
-        classTag = (Spinner) v.findViewById(R.id.classTag);
         ArrayAdapter<CharSequence> priority_adapter = ArrayAdapter.createFromResource(getActivity(), R.array.priority_array, android.R.layout.simple_spinner_item);
         priority_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         priority.setPrompt("Select your priority!");
-
         priority.setAdapter(
                 new NothingSelectedSpinnerAdapter(
                         priority_adapter,
                         R.layout.contact_spinner_row_nothing_selected_priority,
                         getActivity()));
 
+        classTag = (Spinner) v.findViewById(R.id.classTag);
         ArrayAdapter<CharSequence> classTag_adapter = ArrayAdapter.createFromResource(getActivity(), R.array.class_array, android.R.layout.simple_spinner_item);
         classTag_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         classTag.setPrompt("Select your class!");
@@ -96,10 +96,26 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
         }
         else if(v.equals(saveTask)){
             Log.d("buttons", "task saved!" );
-            createNewTask(user.getUid(), inputTask.getText().toString(), dueDateTxt.getText().toString(),classTag.getSelectedItem().toString(),  Integer.parseInt(priority.getSelectedItem().toString() ));
+            String uid = user.getUid();
+            String name = inputTask.getText().toString();
+            String date = dueDateTxt.getText().toString();
+            String className = "";
+            String priorityNum = "";
+            if(classTag.getSelectedItem() != null){
+                className = classTag.getSelectedItem().toString();
+            }
+
+            if(priority.getSelectedItem() != null){
+                priorityNum = priority.getSelectedItem().toString();
+            }
+
+            if(!uid.equals("") && !name.equals("") && !date.equals("") && classTag != null && priority != null){
+                createNewTask(uid, name, date,className,  Integer.parseInt(priorityNum ));
+                Toast.makeText(getContext(),"Task Saved!", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
-
 
     private void createNewTask(String uid, String name, String date, String className, int priority){
         String key = dbRef.child("tasks").push().getKey();
