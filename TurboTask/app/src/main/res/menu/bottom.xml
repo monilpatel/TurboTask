@@ -5,11 +5,11 @@
         android:title="My Tasks"
         android:icon="@drawable/ic_list_black_24dp"
         />
-    <item
-        android:id="@+id/calendar"
-        android:title="Calendar"
-        android:icon="@drawable/ic_event_black_24dp"
-        />
+    <!--<item-->
+        <!--android:id="@+id/calendar"-->
+        <!--android:title="Calendar"-->
+        <!--android:icon="@drawable/ic_event_black_24dp"-->
+        <!--/>-->
 
     <item
         android:id="@+id/add"

@@ -110,6 +110,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
             }
 
             if(!uid.equals("") && !name.equals("") && !date.equals("") && classTag != null && priority != null){
+                Log.d("database", "Inserting date: " + date);
                 createNewTask(uid, name, date,className,  Integer.parseInt(priorityNum ));
                 Toast.makeText(getContext(),"Task Saved!", Toast.LENGTH_SHORT).show();
             }

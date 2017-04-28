@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.list:
                                 changeFragment(TaskListFragment.TAG_TASK_LIST);
                                 break;
-                            case R.id.calendar:
-                                changeFragment(CalendarFragment.TAG_CALENDAR);
-                                break;
+//                            case R.id.calendar:
+//                                changeFragment(CalendarFragment.TAG_CALENDAR);
+//                                break;
                             case R.id.add:
                                 changeFragment(AddTaskFragment.TAG_ADD_TASK);
                                 break;
