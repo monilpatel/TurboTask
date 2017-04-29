@@ -74,7 +74,7 @@ public class ClassesFragment extends Fragment implements View.OnClickListener {
             if(!className.getText().toString().equals(""))
             {
                 createNewClass(className.getText().toString());
-                Toast.makeText(getContext(),"Task Saved!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Class Saved!", Toast.LENGTH_SHORT).show();
             }
         }
     }

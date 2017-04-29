@@ -4,13 +4,24 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +29,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
     private String currentFragment;
     private Fragment mFragment;
+    private final int PICK_IMAGE_REQUEST = 111;
+    private Uri filePath;;
+    private StorageReference mStorageRef;
+    private StorageReference userStorage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +79,37 @@ public class MainActivity extends AppCompatActivity {
         scheduleAlarm();
             }
         };
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        userStorage = mStorageRef.child(mAuth.getCurrentUser().getUid() + "/profile.jpg");
+
+
+        StorageReference islandRef = userStorage.child(mAuth.getCurrentUser().getUid());
+
+        final long ONE_MEGABYTE = 6* 1024 * 1024;
+        userStorage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Data for "images/island.jpg" is returns, use this as needed
+                Log.d("image", "side of bytes: " + bytes.length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, 80, 100, false);
+                BitmapDrawable bd = new BitmapDrawable(getResources(), createCircleBitmap(bitmapResized));
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.setTitle("TurboTask");
+                actionBar.setDisplayShowHomeEnabled(true);
+                actionBar.setLogo(bd);
+                actionBar.setDisplayUseLogoEnabled(true);
+                getSupportActionBar().setHomeAsUpIndicator(bd);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                Log.d("image", exception.toString());
+            }
+        });
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
@@ -160,11 +214,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, SignInActivity.class);
                 MainActivity.this.startActivity(intent);
                 return true;
+            case R.id.profile:
+                Intent imageIntent = new Intent();
+                imageIntent.setType("image/*");
+                imageIntent.setAction(Intent.ACTION_PICK);
+                startActivityForResult(Intent.createChooser(imageIntent, "Select Image"), PICK_IMAGE_REQUEST);
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     public void changeFragment(String fragment_name){
         Fragment fragment;
@@ -224,5 +283,70 @@ public class MainActivity extends AppCompatActivity {
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
                 AlarmManager.INTERVAL_DAY, pIntent);
         Log.d("timer", "Alarm timer started");
+    }
+
+    public Bitmap createCircleBitmap(Bitmap bitmapimg){
+        Bitmap output = Bitmap.createBitmap(bitmapimg.getWidth(),
+                bitmapimg.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmapimg.getWidth(),
+                bitmapimg.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(bitmapimg.getWidth() / 2,
+                bitmapimg.getHeight() / 2, bitmapimg.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmapimg, rect, rect, paint);
+        return output;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data.getData() != null) {
+            filePath = data.getData();
+
+            try {
+                Bitmap bitmap = createCircleBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), filePath));
+                Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, 80, 100, false);
+                BitmapDrawable bd = new BitmapDrawable(getResources(), createCircleBitmap(bitmapResized));
+                ActionBar actionBar = getSupportActionBar();
+                actionBar.setTitle("TurboTask");
+                actionBar.setDisplayShowHomeEnabled(true);
+                actionBar.setLogo(bd);
+                actionBar.setDisplayUseLogoEnabled(true);
+                getSupportActionBar().setHomeAsUpIndicator(bd);
+
+
+
+
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] mData = baos.toByteArray();
+
+                UploadTask uploadTask = userStorage.putBytes(mData);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

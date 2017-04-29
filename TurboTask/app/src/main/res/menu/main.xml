@@ -8,4 +8,5 @@
         <!--app:showAsAction="always" />-->
     <item android:id="@+id/logout"
         android:title="Logout" />
+    <item android:id="@+id/profile" android:title="Change Profile Picture"></item>
 </menu>

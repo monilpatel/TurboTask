@@ -2,10 +2,12 @@
 <resources>
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#114f8e</color>
+    <color name="colorPrimaryDarker">#0e3e6f</color>
+
     <!--<color name="colorAccent">#56ffbe</color>-->
     <color name="colorAccent">#73f5ef</color>
     <color name="darkBlue">#40000000</color>
-
+    <color name="purple">#1460ad</color>
     <color name="bg_end">#247dd6</color>
     <color name="bg_center">#1460ad</color>
     <color name="bg_start">#4022a2</color>
@@ -20,8 +22,8 @@
     <color name="darkgray">#afafaf</color>
     <color name="transparent">#00efefef</color>
 
-    <color name="highPrio">b22222</color>
-    <color name="mediumPrio">ffff00</color>
-    <color name="lowPrio">228b22</color>
+    <color name="highPrio">#C40233</color>
+    <color name="mediumPrio">#FFD300</color>
+    <color name="lowPrio">#00A368</color>
 
 </resources>
