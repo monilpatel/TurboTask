@@ -20,16 +20,16 @@ import java.util.List;
  * Created by monil on 4/26/2017.
  */
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>{
+public class ClassAdapter extends RecyclerView.Adapter<ClassViewHolder>{
 
     private Context mContext;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
 
-    private List<String> mTaskIds = new ArrayList<>();
-    private List<Task> mTasks = new ArrayList<>();
+    private List<String> mClassIds = new ArrayList<>();
+    private List<ClassType> mClasses = new ArrayList<>();
 
-    public TaskAdapter(final Context context, DatabaseReference ref){
+    public ClassAdapter(final Context context, DatabaseReference ref){
 
         mContext = context;
         mDatabaseReference = ref;
@@ -39,37 +39,37 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>{
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d("recycler", "onChildAdded:" + dataSnapshot.getKey());
-                Task task = dataSnapshot.getValue(Task.class);
-                mTaskIds.add(dataSnapshot.getKey());
-                mTasks.add(task);
-                notifyItemInserted(mTasks.size() - 1);
+                ClassType classTemp = dataSnapshot.getValue(ClassType.class);
+                mClassIds.add(dataSnapshot.getKey());
+                mClasses.add(classTemp);
+                notifyItemInserted(mClasses.size() - 1);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.d("recycler", "onChildChanged:" + dataSnapshot.getKey());
-                Task newTask = dataSnapshot.getValue(Task.class);
-                String taskKey = dataSnapshot.getKey();
-                int taskIndex = mTaskIds.indexOf(taskKey);
-                if (taskIndex > -1) {
-                    mTasks.set(taskIndex, newTask);
-                    notifyItemChanged(taskIndex);
+                ClassType newClass = dataSnapshot.getValue(ClassType.class);
+                String classKey = dataSnapshot.getKey();
+                int classIndex = mClassIds.indexOf(classKey);
+                if (classIndex > -1) {
+                    mClasses.set(classIndex, newClass);
+                    notifyItemChanged(classIndex);
                 } else {
-                    Log.w("recycler", "onChildChanged:unknown_child:" + taskKey);
+                    Log.w("recycler", "onChildChanged:unknown_child:" + classKey);
                 }
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d("recycler", "onChildRemoved:" + dataSnapshot.getKey());
-                String taskKey = dataSnapshot.getKey();
-                int taskIndex = mTaskIds.indexOf(taskKey);
-                if (taskIndex > -1) {
-                    mTaskIds.remove(taskIndex);
-                    mTasks.remove(taskIndex);
-                    notifyItemRemoved(taskIndex);
+                String classKey = dataSnapshot.getKey();
+                int classIndex = mClassIds.indexOf(classKey);
+                if (classIndex > -1) {
+                    mClassIds.remove(classIndex);
+                    mClasses.remove(classIndex);
+                    notifyItemRemoved(classIndex);
                 } else {
-                    Log.w("recycler", "onChildRemoved:unknown_child:" + taskKey);
+                    Log.w("recycler", "onChildRemoved:unknown_child:" + classKey);
                 }
             }
 
@@ -90,24 +90,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>{
     }
 
     @Override
-    public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ClassViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.item_task, parent, false);
-        return new TaskViewHolder(view);
+        View view = inflater.inflate(R.layout.item_class, parent, false);
+        return new ClassViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(TaskViewHolder holder, int position) {
-        Task task = mTasks.get(position);
-        holder.name.setText(task.getName());
-        holder.className.setText(task.getClassName());
-        holder.date.setText(task.getDate());
-        holder.setPriorityColor(task.getPriority());
+    public void onBindViewHolder(ClassViewHolder holder, int position) {
+        ClassType classTemp = mClasses.get(position);
+        holder.className.setText(classTemp.getClassName());
     }
 
     @Override
     public int getItemCount() {
-        return mTasks.size();
+        return mClasses.size();
     }
 
     public void cleanupListener(){

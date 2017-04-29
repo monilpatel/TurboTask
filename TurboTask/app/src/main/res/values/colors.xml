@@ -20,4 +20,8 @@
     <color name="darkgray">#afafaf</color>
     <color name="transparent">#00efefef</color>
 
+    <color name="highPrio">b22222</color>
+    <color name="mediumPrio">ffff00</color>
+    <color name="lowPrio">228b22</color>
+
 </resources>
