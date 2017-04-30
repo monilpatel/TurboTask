@@ -63,6 +63,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
         dbRef = FirebaseDatabase.getInstance().getReference("data");
         user = FirebaseAuth.getInstance().getCurrentUser();
         classRef = FirebaseDatabase.getInstance().getReference("data").child("classes").child(user.getUid());
+        classes = new ArrayList<String>();
         Log.d("retain", "ADD FRAGMENT ONCREATE");
 
     }
@@ -94,20 +95,11 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
             classRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    classes = new ArrayList<String>();
+
                     for(DataSnapshot classesSnapShot: dataSnapshot.getChildren()){
                         String className = classesSnapShot.child("name").getValue(String.class);
                         classes.add(className);
                     }
-                    if(getActivity()!= null){
-                        if(classes.size() == 0){
-                            classes.add("Select Class");
-                        }
-
-                    }
-
-
-
                 }
 
                 @Override
@@ -117,7 +109,13 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
             });
 
         }
-        
+
+        if(getActivity()!= null){
+            if(classes.size() == 0){
+                classes.add("Select Class");
+            }
+
+        }
         ArrayAdapter<String> classesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, classes);
         classesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         classTag.setAdapter(new NothingSelectedSpinnerAdapter(
