@@ -47,6 +47,13 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(savedInstanceState != null){
+            Log.d("retain", "TASK LIST SAVED INSTANCE NOT NULL STUPID");
+        }
+        else{
+            Log.d("retain", "TASK LIST SAVED INSTANCE WASSSSS NULL STUPID");
+
+        }
         View v = inflater.inflate(R.layout.list_fragment, container, false);
         mRecycler = (RecyclerView) v.findViewById(R.id.recycler_tasks);
         v.setOnClickListener(new TaskListListener());

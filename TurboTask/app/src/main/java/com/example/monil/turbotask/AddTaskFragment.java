@@ -32,6 +32,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by monil on 4/19/2017.
@@ -48,6 +49,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
     private FirebaseUser user;
     private DatabaseReference dbRef;
     private DatabaseReference classRef;
+    private List<String> classes;
 
     public static AddTaskFragment newInstance() {
         AddTaskFragment fragment = new AddTaskFragment();
@@ -57,9 +59,11 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         dbRef = FirebaseDatabase.getInstance().getReference("data");
         user = FirebaseAuth.getInstance().getCurrentUser();
         classRef = FirebaseDatabase.getInstance().getReference("data").child("classes").child(user.getUid());
+        Log.d("retain", "ADD FRAGMENT ONCREATE");
 
     }
 
@@ -86,44 +90,42 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
                         getActivity()));
 
         classTag = (Spinner) v.findViewById(R.id.classTag);
-//        ArrayAdapter<CharSequence> classTag_adapter = ArrayAdapter.createFromResource(getActivity(), R.array.class_array, android.R.layout.simple_spinner_item);
-//        classTag_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        classTag.setPrompt("Select your class!");
-        classRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                final List<String> classes = new ArrayList<String>();
-                for(DataSnapshot classesSnapShot: dataSnapshot.getChildren()){
-                    String className = classesSnapShot.child("name").getValue(String.class);
-                    classes.add(className);
-                }
-                if(getActivity()!= null){
-                    if(classes.size() == 0){
-                        classes.add("Select Class");
+        if(savedInstanceState == null){
+            classRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    classes = new ArrayList<String>();
+                    for(DataSnapshot classesSnapShot: dataSnapshot.getChildren()){
+                        String className = classesSnapShot.child("name").getValue(String.class);
+                        classes.add(className);
                     }
-                    ArrayAdapter<String> classesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, classes);
-                    classesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    classTag.setAdapter(new NothingSelectedSpinnerAdapter(
-                            classesAdapter,
-                            R.layout.contact_spinner_row_nothing_selected_classtag,
-                            getActivity()));
+                    if(getActivity()!= null){
+                        if(classes.size() == 0){
+                            classes.add("Select Class");
+                        }
+
+                    }
+
+
+
                 }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+        
+        ArrayAdapter<String> classesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, classes);
+        classesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        classTag.setAdapter(new NothingSelectedSpinnerAdapter(
+                classesAdapter,
+                R.layout.contact_spinner_row_nothing_selected_classtag,
+                getActivity()));
 
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-//        classTag.setAdapter(
-//                new NothingSelectedSpinnerAdapter(
-//                        classTag_adapter,
-//                        R.layout.contact_spinner_row_nothing_selected_classtag,
-//                        getActivity()));
         return  v;
     }
 
