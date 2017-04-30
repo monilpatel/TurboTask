@@ -85,7 +85,7 @@ public class ClassesFragment extends Fragment implements View.OnClickListener {
         Map<String, Object> classValues = newClass.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/classes/" + mUser.getUid() + "/" + key, classValues);
+        childUpdates.put(key, classValues);
 
         mTasksReference.updateChildren(childUpdates);
 
