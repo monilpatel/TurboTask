@@ -107,32 +107,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-//        mStorageRef = FirebaseStorage.getInstance().getReference();
-//        final long ONE_MEGABYTE = 6* 1024 * 1024;
-//        userStorage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                // Data for "images/island.jpg" is returns, use this as needed
-//                Log.d("image", "side of bytes: " + bytes.length);
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, 80, 100, false);
-//                BitmapDrawable bd = new BitmapDrawable(getResources(), createCircleBitmap(bitmapResized));
-//                ActionBar actionBar = getSupportActionBar();
-//                actionBar.setTitle("TurboTask");
-//                actionBar.setDisplayShowHomeEnabled(true);
-//                actionBar.setLogo(bd);
-//                actionBar.setDisplayUseLogoEnabled(true);
-//                getSupportActionBar().setHomeAsUpIndicator(bd);
-//
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//                Log.d("image", exception.toString());
-//            }
-//        });
-
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener
@@ -144,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.list:
                                 changeFragment(TaskListFragment.TAG_TASK_LIST);
                                 break;
-//                            case R.id.calendar:
-//                                changeFragment(CalendarFragment.TAG_CALENDAR);
-//                                break;
                             case R.id.add:
                                 changeFragment(AddTaskFragment.TAG_ADD_TASK);
                                 break;
@@ -155,9 +126,6 @@ public class MainActivity extends AppCompatActivity {
                                 break;
 
                         }
-//                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                        transaction.replace(R.id.frame_layout, selectedFragment);
-//                        transaction.commit();
                         return true;
                     }
                 });
@@ -174,15 +142,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState == null){
             Log.d("retain", "list view was created ");
-//            listFragment = new TaskListFragment();
-//            ((TaskFragment)taskFragment).setActiveTag(TaskListFragment.TAG_TASK_LIST);
-//            fragmentManager.beginTransaction().add(listFragment, TaskListFragment.TAG_TASK_LIST).commit();
-//            Log.d("retain", "taskFragment new tag: " +  ((TaskFragment)taskFragment).getActiveTag());
             changeFragment(TaskListFragment.TAG_TASK_LIST);
 
         }
         else{
-
             Log.d("retain", "savedInstance was not null");
             String currentTag = ((TaskFragment)taskFragment).getActiveTag();
 

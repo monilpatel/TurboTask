@@ -1,6 +1,8 @@
 package com.example.monil.turbotask;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -106,7 +108,26 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
         holder.name.setText(task.getName());
         holder.className.setText(task.getClassName());
         holder.date.setText(task.getDate());
-        holder.setPriorityColor(task.getPriority());
+//        holder.setPriorityColor(task.getPriority());
+
+        if(task.getPriority() == 1)
+        {
+            holder.priorityColor.setBackgroundColor(ContextCompat.getColor(holder.priorityColor.getContext(), R.color.highPrio));
+        }
+        else if(task.getPriority() == 2)
+        {
+            holder.priorityColor.setBackgroundColor(ContextCompat.getColor(holder.priorityColor.getContext(), R.color.mediumPrio));
+        }
+        else if(task.getPriority() == 3)
+        {
+            holder.priorityColor.setBackgroundColor(ContextCompat.getColor(holder.priorityColor.getContext(), R.color.lowPrio));
+        }
+        else{
+            holder.priorityColor.setBackgroundColor(Color.LTGRAY);
+
+        }
+
+
     }
 
     @Override

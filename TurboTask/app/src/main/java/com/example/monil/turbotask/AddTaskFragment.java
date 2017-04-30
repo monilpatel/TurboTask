@@ -2,9 +2,11 @@ package com.example.monil.turbotask;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -44,6 +47,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
     private Spinner classTag;
     private FirebaseUser user;
     private DatabaseReference dbRef;
+    private DatabaseReference classRef;
 
     public static AddTaskFragment newInstance() {
         AddTaskFragment fragment = new AddTaskFragment();
@@ -55,6 +59,8 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         dbRef = FirebaseDatabase.getInstance().getReference("data");
         user = FirebaseAuth.getInstance().getCurrentUser();
+        classRef = FirebaseDatabase.getInstance().getReference("data").child("classes").child(user.getUid());
+
     }
 
     @Override
@@ -80,15 +86,44 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
                         getActivity()));
 
         classTag = (Spinner) v.findViewById(R.id.classTag);
-        ArrayAdapter<CharSequence> classTag_adapter = ArrayAdapter.createFromResource(getActivity(), R.array.class_array, android.R.layout.simple_spinner_item);
-        classTag_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        classTag.setPrompt("Select your class!");
+//        ArrayAdapter<CharSequence> classTag_adapter = ArrayAdapter.createFromResource(getActivity(), R.array.class_array, android.R.layout.simple_spinner_item);
+//        classTag_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        classTag.setPrompt("Select your class!");
+        classRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final List<String> classes = new ArrayList<String>();
+                for(DataSnapshot classesSnapShot: dataSnapshot.getChildren()){
+                    String className = classesSnapShot.child("name").getValue(String.class);
+                    classes.add(className);
+                }
+                if(getActivity()!= null){
+                    if(classes.size() == 0){
+                        classes.add("Select Class");
+                    }
+                    ArrayAdapter<String> classesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, classes);
+                    classesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    classTag.setAdapter(new NothingSelectedSpinnerAdapter(
+                            classesAdapter,
+                            R.layout.contact_spinner_row_nothing_selected_classtag,
+                            getActivity()));
+                }
 
-        classTag.setAdapter(
-                new NothingSelectedSpinnerAdapter(
-                        classTag_adapter,
-                        R.layout.contact_spinner_row_nothing_selected_classtag,
-                        getActivity()));
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+//        classTag.setAdapter(
+//                new NothingSelectedSpinnerAdapter(
+//                        classTag_adapter,
+//                        R.layout.contact_spinner_row_nothing_selected_classtag,
+//                        getActivity()));
         return  v;
     }
 
@@ -110,7 +145,18 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
             }
 
             if(priority.getSelectedItem() != null){
-                priorityNum = priority.getSelectedItem().toString();
+//                priorityNum =
+                String priorityLabel = priority.getSelectedItem().toString();
+                if(priorityLabel.equals("High Priority")){
+                    priorityNum = "1";
+                }
+                else if(priorityLabel.equals("Medium Priority")){
+                    priorityNum = "2";
+                }
+                else if(priorityLabel.equals("Low Priority")){
+                    priorityNum = "3";
+                }
+
             }
 
             if(!uid.equals("") && !name.equals("") && !date.equals("") && classTag != null && priority != null){

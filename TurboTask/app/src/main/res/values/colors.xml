@@ -22,7 +22,7 @@
     <color name="darkgray">#afafaf</color>
     <color name="transparent">#00efefef</color>
 
-    <color name="highPrio">#C40233</color>
+    <color type="color" name="highPrio">#C40233</color>
     <color name="mediumPrio">#FFD300</color>
     <color name="lowPrio">#00A368</color>
 

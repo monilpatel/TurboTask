@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +63,9 @@ public class ClassesFragment extends Fragment implements View.OnClickListener {
         if(mTasksReference != null){
             mTaskAdapter = new TaskAdapter(getContext(), mTasksReference);
             mRecycler.setAdapter(mTaskAdapter);
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mTaskAdapter);
+            ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
+            mItemTouchHelper.attachToRecyclerView(mRecycler);
         }
         return v;
     }

@@ -87,9 +87,11 @@ public class NothingSelectedSpinnerAdapter implements SpinnerAdapter, ListAdapte
         // Android BUG! http://code.google.com/p/android/issues/detail?id=17128 -
         // Spinner does not support multiple view types
         if (position == 0) {
+
             return nothingSelectedDropdownLayout == -1 ?
                     new View(context) :
                     getNothingSelectedDropdownView(parent);
+
         }
 
         // Could re-use the convertView if possible, use setTag...

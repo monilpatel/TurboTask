@@ -1,6 +1,7 @@
 package com.example.monil.turbotask;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -16,13 +17,14 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements ItemTouch
     public TextView className;
     public TextView date;
     public TextView priorityColor;
+
     public TaskViewHolder(View itemView) {
         super(itemView);
         name = (TextView) itemView.findViewById(R.id.task_name);
         className = (TextView) itemView.findViewById(R.id.task_class_name);
         date = (TextView) itemView.findViewById(R.id.task_due_date);
         priorityColor = (TextView)itemView.findViewById(R.id.priorityColor);
-        priorityColor.setBackgroundColor(Color.WHITE);
+        priorityColor.setBackgroundColor(Color.LTGRAY);
 
     }
 
@@ -36,9 +38,13 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements ItemTouch
         {
             priorityColor.setBackgroundColor(Color.YELLOW);
         }
-        else
+        else if(val == 3)
         {
             priorityColor.setBackgroundColor(Color.GREEN);
+        }
+        else{
+            priorityColor.setBackgroundColor(Color.LTGRAY);
+
         }
     }
 
