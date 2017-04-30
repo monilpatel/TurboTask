@@ -41,28 +41,29 @@ public class PriorityService extends Service {
         //get a list of user tasks
         //if any are due tommorow make priority 1
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(mUser != null){
+        if(mUser != null) {
             mTasksReference = FirebaseDatabase.getInstance().getReference().child("data").child("user-tasks").child(mUser.getUid());
-        }
-        Date date = new Date();
-        String dateString = new SimpleDateFormat("M/dd/yyyy").format(date);
-        Log.d("database" ,  dateString);
-        Query queryRef = mTasksReference.orderByChild("date").equalTo(dateString);
-        queryRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    Log.d("database", postSnapshot.toString());
-                    mTasksReference.child(postSnapshot.getKey()).child("priority").setValue(1);
+
+            Date date = new Date();
+            String dateString = new SimpleDateFormat("M/dd/yyyy").format(date);
+            Log.d("database", dateString);
+            Query queryRef = mTasksReference.orderByChild("date").equalTo(dateString);
+            queryRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Log.d("database", postSnapshot.toString());
+                        mTasksReference.child(postSnapshot.getKey()).child("priority").setValue(1);
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+            });
+        }
         return Service.START_STICKY;
     }
 }

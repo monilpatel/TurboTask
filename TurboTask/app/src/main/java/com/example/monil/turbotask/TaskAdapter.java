@@ -12,6 +12,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by monil on 4/26/2017.
  */
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>{
+public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements ItemTouchHelperAdapter {
 
     private Context mContext;
     private DatabaseReference mDatabaseReference;
@@ -65,9 +66,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>{
                 String taskKey = dataSnapshot.getKey();
                 int taskIndex = mTaskIds.indexOf(taskKey);
                 if (taskIndex > -1) {
+                    Log.d("swipe", "taskid: " + mTaskIds.get(taskIndex));
+
                     mTaskIds.remove(taskIndex);
                     mTasks.remove(taskIndex);
                     notifyItemRemoved(taskIndex);
+
                 } else {
                     Log.w("recycler", "onChildRemoved:unknown_child:" + taskKey);
                 }
@@ -114,5 +118,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder>{
         if(mChildEventListener != null){
             mDatabaseReference.removeEventListener(mChildEventListener);
         }
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        Task prev = mTasks.remove(fromPosition);
+        mTasks.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+        notifyItemMoved(fromPosition, toPosition);
+
+        String prevID = mTaskIds.remove(fromPosition);
+        mTaskIds.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prevID);
+        notifyItemMoved(fromPosition, toPosition);
+
+
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        mDatabaseReference.child(mTaskIds.get(position)).removeValue();
+        mTasks.remove(position);
+        mTaskIds.remove(position);
+        notifyItemRemoved(position);
+        Log.d("swipe", position + "");
+
+
+
     }
 }

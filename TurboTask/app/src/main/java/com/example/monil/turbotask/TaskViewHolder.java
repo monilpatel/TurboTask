@@ -11,7 +11,7 @@ import org.w3c.dom.Text;
  * Created by monil on 4/26/2017.
  */
 
-public class TaskViewHolder extends RecyclerView.ViewHolder {
+public class TaskViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder  {
     public TextView name;
     public TextView className;
     public TextView date;
@@ -40,5 +40,17 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         {
             priorityColor.setBackgroundColor(Color.GREEN);
         }
+    }
+
+    @Override
+    public void onItemSelected() {
+        itemView.setBackgroundColor(Color.LTGRAY);
+
+    }
+
+    @Override
+    public void onItemClear() {
+       itemView.setBackgroundColor(Color.WHITE);
+
     }
 }

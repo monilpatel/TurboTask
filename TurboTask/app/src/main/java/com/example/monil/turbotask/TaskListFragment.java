@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class TaskListFragment extends Fragment {
     private FirebaseUser mUser;
     private RecyclerView mRecycler;
     private TaskAdapter mTaskAdapter;
+    private ItemTouchHelper mItemTouchHelper;
 
     public static TaskListFragment newInstance() {
         TaskListFragment fragment = new TaskListFragment();
@@ -53,6 +55,9 @@ public class TaskListFragment extends Fragment {
         if(mTasksReference != null){
             mTaskAdapter = new TaskAdapter(getContext(), mTasksReference);
             mRecycler.setAdapter(mTaskAdapter);
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mTaskAdapter);
+            mItemTouchHelper = new ItemTouchHelper(callback);
+            mItemTouchHelper.attachToRecyclerView(mRecycler);
         }
 
         return v;
@@ -66,4 +71,5 @@ public class TaskListFragment extends Fragment {
             Log.d("recycler", "Clicked and Position is : " + String.valueOf(itemPosition));
         }
     }
+
 }
