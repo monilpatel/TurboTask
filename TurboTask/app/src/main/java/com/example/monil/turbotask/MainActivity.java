@@ -148,23 +148,25 @@ public class MainActivity extends AppCompatActivity {
         else{
             Log.d("retain", "savedInstance was not null");
             String currentTag = ((TaskFragment)taskFragment).getActiveTag();
+            if(currentTag != null){
+                if(currentTag.equals(TaskListFragment.TAG_TASK_LIST)){
+                    Log.d("retain", "list view was retained" );
+                    listFragment = fragmentManager.findFragmentByTag(currentTag);
+                }
+                else if(currentTag.equals(AddTaskFragment.TAG_ADD_TASK)){
+                    Log.d("retain", "add task was retained" );
+                    addTaskFragment = fragmentManager.findFragmentByTag(currentTag);
+                }
+                else if(currentTag.equals(CalendarFragment.TAG_CALENDAR)){
+                    Log.d("retain", "calendar was retained" );
+                    calendarFragment = fragmentManager.findFragmentByTag(currentTag);
+                }
+                else if(currentTag.equals(ClassesFragment.TAG_CLASSES)){
+                    Log.d("retain", "classes was retained" );
+                    classesFragment = fragmentManager.findFragmentByTag(currentTag);
+                }
+            }
 
-            if(currentTag.equals(TaskListFragment.TAG_TASK_LIST)){
-                Log.d("retain", "list view was retained" );
-                listFragment = fragmentManager.findFragmentByTag(currentTag);
-            }
-            else if(currentTag.equals(AddTaskFragment.TAG_ADD_TASK)){
-                Log.d("retain", "add task was retained" );
-                addTaskFragment = fragmentManager.findFragmentByTag(currentTag);
-            }
-            else if(currentTag.equals(CalendarFragment.TAG_CALENDAR)){
-                Log.d("retain", "calendar was retained" );
-                calendarFragment = fragmentManager.findFragmentByTag(currentTag);
-            }
-            else if(currentTag.equals(ClassesFragment.TAG_CLASSES)){
-                Log.d("retain", "classes was retained" );
-                classesFragment = fragmentManager.findFragmentByTag(currentTag);
-            }
         }
 
     }
