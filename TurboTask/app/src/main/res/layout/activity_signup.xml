@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:background="@color/darkBlue"
+        android:background="@color/darkInput"
         android:padding="10dp"
         android:hint="@string/username"
         android:textColorHint="@color/gray"
@@ -33,7 +33,7 @@
         android:layout_width="303dp"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:background="@color/darkBlue"
+        android:background="@color/darkInput"
         android:padding="10dp"
         android:hint="@string/password"
         android:textColorHint="@color/gray"
@@ -66,5 +66,19 @@
         app:layout_constraintLeft_toLeftOf="@+id/signup_password"
         app:layout_constraintRight_toRightOf="@+id/signup_password"
         app:layout_constraintTop_toBottomOf="@+id/signup_password" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="82dp"
+        android:layout_height="77dp"
+        app:srcCompat="@drawable/ic_check_circle_black_24dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/signup_password"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/signup_password"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/signup_email"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp" />
 
 </android.support.constraint.ConstraintLayout>
