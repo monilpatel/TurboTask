@@ -104,6 +104,10 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
         scheduleAlarm();
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getWindow().setNavigationBarColor(getResources().getColor(R.color.darkBlue));
+                }
             }
         };
 
