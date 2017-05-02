@@ -108,7 +108,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
         holder.name.setText(task.getName());
         holder.className.setText(task.getClassName());
         holder.date.setText(task.getDate());
-//        holder.setPriorityColor(task.getPriority());
 
         if(task.getPriority() == 1)
         {

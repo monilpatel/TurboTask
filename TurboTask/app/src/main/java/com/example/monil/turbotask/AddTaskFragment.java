@@ -139,30 +139,36 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener{
             String name = inputTask.getText().toString();
             String date = dueDateTxt.getText().toString();
             String className = "";
-            String priorityNum = "";
+            String priorityNum = "0";
             if(classTag.getSelectedItem() != null){
                 className = classTag.getSelectedItem().toString();
             }
+            if(className.equals("Select Class")){
+                className = "";
+            }
 
             if(priority.getSelectedItem() != null){
-//                priorityNum =
                 String priorityLabel = priority.getSelectedItem().toString();
-                if(priorityLabel.equals("High Priority")){
+                if(priorityLabel.equals("High")){
                     priorityNum = "1";
                 }
-                else if(priorityLabel.equals("Medium Priority")){
+                else if(priorityLabel.equals("Medium")){
                     priorityNum = "2";
                 }
-                else if(priorityLabel.equals("Low Priority")){
+                else if(priorityLabel.equals("Low")){
                     priorityNum = "3";
                 }
 
             }
 
-            if(!uid.equals("") && !name.equals("") && !date.equals("") && classTag != null && priority != null){
+            if(!uid.equals("") && !name.equals("")){
                 Log.d("database", "Inserting date: " + date);
-                createNewTask(uid, name, date,className,  Integer.parseInt(priorityNum ));
+                createNewTask(uid, name, date,className,  Integer.parseInt(priorityNum));
                 Toast.makeText(getContext(),"Task Saved!", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getContext(),"Please enter a name!", Toast.LENGTH_SHORT).show();
+
             }
 
         }

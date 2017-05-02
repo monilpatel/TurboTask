@@ -78,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         if (!task.isSuccessful()) {
                             Log.d("auth", "signup not succesfull");
                             Toast.makeText(com.example.monil.turbotask.SignUpActivity.this, "Authentication failed." + task.getException(),
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_LONG).show();
                         } else {
                             Log.d("auth", "signup was succesfull");
                             startActivity(new Intent(com.example.monil.turbotask.SignUpActivity.this, MainActivity.class));

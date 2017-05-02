@@ -28,26 +28,6 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements ItemTouch
 
     }
 
-    public void setPriorityColor(int val)
-    {
-        if(val == 1)
-        {
-            priorityColor.setBackgroundColor(Color.RED);
-        }
-        else if(val == 2)
-        {
-            priorityColor.setBackgroundColor(Color.YELLOW);
-        }
-        else if(val == 3)
-        {
-            priorityColor.setBackgroundColor(Color.GREEN);
-        }
-        else{
-            priorityColor.setBackgroundColor(Color.LTGRAY);
-
-        }
-    }
-
     @Override
     public void onItemSelected() {
         itemView.setBackgroundColor(Color.LTGRAY);

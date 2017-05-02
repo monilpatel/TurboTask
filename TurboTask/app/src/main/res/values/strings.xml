@@ -10,9 +10,10 @@
         <item>History</item>
     </string-array>
     <string-array name="priority_array">
-        <item>High Priority</item>
-        <item>Medium Priority</item>
-        <item>Low Priority</item>
+        <item>Select Priority</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
     </string-array>
 
 </resources>

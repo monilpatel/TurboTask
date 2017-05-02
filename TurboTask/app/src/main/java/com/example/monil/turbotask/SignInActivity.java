@@ -79,7 +79,8 @@ public class SignInActivity extends AppCompatActivity {
                                 if (!task.isSuccessful()) {
                                     // there was an error
                                     //TODO: fix string
-                                    Toast.makeText(SignInActivity.this,"ERRRORRRRRR", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(com.example.monil.turbotask.SignInActivity.this, "Authentication failed." + task.getException(),
+                                            Toast.LENGTH_LONG).show();
                                 } else {
                                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
 //                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

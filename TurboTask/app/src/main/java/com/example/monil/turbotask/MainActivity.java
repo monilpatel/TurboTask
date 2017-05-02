@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,6 +39,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private Uri filePath;;
     private StorageReference mStorageRef;
     private StorageReference userStorage;
+    private  Bitmap bitmap;
 
 
     @Override
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     mStorageRef = FirebaseStorage.getInstance().getReference();
                     userStorage = mStorageRef.child(user.getUid() + "/profile.jpg");
 
-                    final long ONE_MEGABYTE = 6* 1024 * 1024;
+                    final long ONE_MEGABYTE = 6 * 1024 * 1024;
                     userStorage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                         @Override
                         public void onSuccess(byte[] bytes) {
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("image", exception.toString());
                         }
                     });
+                    scheduleAlarm();
                     Log.d("auth", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -103,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                     MainActivity.this.startActivity(myIntent);
                     finish();
                 }
-        scheduleAlarm();
 
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getWindow().setNavigationBarColor(getResources().getColor(R.color.darkBlue));
@@ -302,42 +305,46 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data.getData() != null) {
             filePath = data.getData();
+            File filePathString = new File(filePath.toString());
+            if(filePathString.length() <  6*(1024 * 1024) ){
+                try {
 
-            try {
-                Bitmap bitmap = createCircleBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), filePath));
-                Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, 80, 100, false);
-                BitmapDrawable bd = new BitmapDrawable(getResources(), createCircleBitmap(bitmapResized));
-                ActionBar actionBar = getSupportActionBar();
-                actionBar.setTitle("TurboTask");
-                actionBar.setDisplayShowHomeEnabled(true);
-                actionBar.setLogo(bd);
-                actionBar.setDisplayUseLogoEnabled(true);
-                getSupportActionBar().setHomeAsUpIndicator(bd);
+                   bitmap = createCircleBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), filePath));
 
 
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] mData = baos.toByteArray();
 
-
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] mData = baos.toByteArray();
-
-                UploadTask uploadTask = userStorage.putBytes(mData);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    UploadTask uploadTask = userStorage.putBytes(mData);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
 //                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
+                            Bitmap bitmapResized = Bitmap.createScaledBitmap(bitmap, 80, 100, false);
+                            BitmapDrawable bd = new BitmapDrawable(getResources(), createCircleBitmap(bitmapResized));
+                            ActionBar actionBar = getSupportActionBar();
+                            actionBar.setTitle("TurboTask");
+                            actionBar.setDisplayShowHomeEnabled(true);
+                            actionBar.setLogo(bd);
+                            actionBar.setDisplayUseLogoEnabled(true);
+                            getSupportActionBar().setHomeAsUpIndicator(bd);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            else{
+                Toast.makeText(com.example.monil.turbotask.MainActivity.this, "Image size to large.",
+                        Toast.LENGTH_LONG).show();            }
+
         }
     }
 }
