@@ -4,6 +4,19 @@
     <string name="password">Password</string>
     <string name="login">LOGIN</string>
     <string name="register">Don\'t have an account? Signup!</string>
+    <string name="register_account">REGISTER</string>
+    <string name="add_task_label">Add Task</string>
+    <string name="add_class_label">Add Class</string>
+    <string name="class_name">Name of Class</string>
+    <string name="task_name">Name of Task</string>
+    <string name="save_class">Save Class</string>
+    <string name="save_task">Save Task</string>
+    <string name="select_class">Select Class</string>
+    <string name="select_priority">Select Priority</string>
+
+    <string name="due_date">Due Date</string>
+
+
     <string-array name="class_array">
         <item>Math</item>
         <item>Science</item>

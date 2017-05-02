@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FragmentManager fragmentManager;
-    private Fragment listFragment, taskFragment, calendarFragment, classesFragment, addTaskFragment ;
+    private Fragment listFragment, taskFragment, classesFragment, addTaskFragment ;
 
 
     private String currentFragment;
@@ -164,10 +164,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("retain", "add task was retained" );
                     addTaskFragment = fragmentManager.findFragmentByTag(currentTag);
                 }
-                else if(currentTag.equals(CalendarFragment.TAG_CALENDAR)){
-                    Log.d("retain", "calendar was retained" );
-                    calendarFragment = fragmentManager.findFragmentByTag(currentTag);
-                }
                 else if(currentTag.equals(ClassesFragment.TAG_CLASSES)){
                     Log.d("retain", "classes was retained" );
                     classesFragment = fragmentManager.findFragmentByTag(currentTag);
@@ -225,10 +221,6 @@ public class MainActivity extends AppCompatActivity {
         if(fragment_name.equals(AddTaskFragment.TAG_ADD_TASK)){
             fragmentClass = AddTaskFragment.class;
             Log.d("retain", "add tasks fragment selected");
-        }
-        else if(fragment_name.equals(CalendarFragment.TAG_CALENDAR)){
-            fragmentClass = CalendarFragment.class;
-            Log.d("retain", "calendar fragment selected");
         }
         else if(fragment_name.equals(ClassesFragment.TAG_CLASSES)){
             fragmentClass = ClassesFragment.class;

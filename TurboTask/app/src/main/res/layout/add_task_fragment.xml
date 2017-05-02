@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Due Date"
+                android:hint="@string/due_date"
                 android:background="@color/white"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
-        android:text="Save Task"
+        android:text="@string/save_task"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
